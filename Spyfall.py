@@ -20,7 +20,7 @@ import operator
 
 class Config(enumerate):
     BOT_PREFIX = "~"
-    TOKEN = "ODQxOTc4NzQ0MjYwMzk1MDI5.YJunzw.pqxsZawIWDmicW0ysAUYR5tmT2A"
+    TOKEN = "" # 여기에 봇 토큰 입력
     VERSION = "1.0.0"
 
 class EMOJI_ICON(enumerate):
