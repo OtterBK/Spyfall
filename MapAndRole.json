@@ -1,0 +1,386 @@
+{
+  "data": {
+    "은행": {
+      "역할": [
+        "상담원",
+        "고객",
+        "지점장",
+        "경비원",
+        "청소부",
+        "VIP",
+        "도둑",
+        "금고관리인",
+        "무장강도",
+        "보안관"
+      ],
+      "이미지_주소": "https://i.pinimg.com/originals/f0/d1/47/f0d147690e2ffbe4bbcc1a829f929d90.png"
+    },
+    "레스토랑": {
+      "역할": [
+        "쉐프",
+        "파티시에",
+        "웨이터",
+        "뮤지션",
+        "손님",
+        "음식 비평가",
+        "알바생",
+        "오너",
+        "진상손님",
+        "주차장 관리 요원"
+      ],
+      "이미지_주소": "https://ww.namu.la/s/2b54a2802f976502c217f3a62217e5ac94d4b4a7315d5f736bcce55cffd446b7918ea83918d606990825fcee0c5aa977c555a7d8d4168ce555ee23fe101810c7bf7f80ce782d5c7736b1bb0864e7338552ad6d7f113d996806d154b1f971f54416bfc47e0ecf6cd5d4e6c2b8fcb9df31"
+    },
+    "회사회식": {
+      "역할": [
+        "요리사",
+        "알바생",
+        "배달원",
+        "부장",
+        "과장",
+        "차장",
+        "대리",
+        "신입사원",
+        "만취한 사원",
+        "주모"
+      ],
+      "이미지_주소": "https://w.namu.la/s/2fd18d51403921ceac01fcc23d13fa103dc0945ed7a3a0eb10306ff5564eea024cc56dcceb5dd3f98f02f3a6c9813992511e972028e986726b3af2b3e79540017672f6b46c3194946ab7e80f2ffa502cabd052f4e4f07ea1e43d9c7d3e67640a9da3aef3931c695329b78850a3c5d268"
+    },
+    "군대": {
+      "역할": [
+        "중대장",
+        "이등병",
+        "말년 병장",
+        "PX병",
+        "또라이",
+        "의무병",
+        "면회객",
+        "운전병",
+        "분대장",
+        "행보관"
+      ],
+      "이미지_주소": "https://w.namu.la/s/1048f7451fdb3ae68c37dfea5cb482b033e605241898bc1dc2bd156048daa775adf4404cb52b7e09e4162fc733619f44871fa514ac2d012a903c5e394db469b32a15b3e69b9c6b89049cea14ac916153c898a27ee8718f8100e7161021a6b0c7b3aed3976e2441b4a95060b7b906a169"
+    },
+    "경찰서": {
+      "역할": [
+        "경찰",
+        "형사",
+        "서장",
+        "주정뱅이",
+        "사기꾼",
+        "사기 피해자",
+        "변호사",
+        "탐정",
+        "건달",
+        "주정뱅이 데리러 온 사람"
+      ],
+      "이미지_주소": "https://w.namu.la/s/5e09043e1d8bd18e9b9ee52145433425dd0fbe9da65b0c807b7b9600adb63a761fdb0de57a7b3320f5018b1e3f01be77dba9a4e409284ef7b15d14f592a20de16e2d295aba44cd903be30749cb00bb8859e31f686d35d3411e436753122fd047"
+    },
+    "해적선": {
+      "역할": [
+        "선장",
+        "요리사",
+        "포수",
+        "의원",
+        "항해사",
+        "하인",
+        "감금된 노예",
+        "노예상",
+        "크라켄",
+        "목수"
+      ],
+      "이미지_주소": "https://lh3.googleusercontent.com/proxy/mi6uA14F9uxBcJDtRk1GBKZvkG3bDLW8L3mdYR-J7X1SuzeUbOtRI0iRekg1aM8RUuMDh_tLQG9OlCSh-2BwaeEaPR8Ex9i9Ll6spCMXCxO_wHpV2h3003s9jzOTwO-alaepN9acg5Hc_KrKmAZLeJstkq9vXFU2vB1cfVHeBZbYJXO39vTw5WEguwlth6tMalfExcfAQXvKKSskd5fnJ3ovVxqQcSafHlgs0_7-Icaxi_KS_APAmCmoLPq2Zp4y0_0HncFJ_4qMysfH3A0c2OVCiomKxKRg9LHDhFa701uyXmgjDQLUSQ017MPMGPbkFKRhdaIZJOyChGxvoc4UPGVHBQY6Nr_FB1Vm-jrVERNS1U7FHUU2BMExypQJCkFA8owft0G4y7BeZgVlDeJ6uVjk-xtgjmwvVJirlUwswQCqX9mCxyRAc4qE6RGrQwrm_Kh10QfL8n0cIX03Sfjrn927cf8hNKD1dac"
+    },
+    "편의점": {
+      "역할": [
+        "알바",
+        "손님",
+        "점장",
+        "주정뱅이",
+        "틀딱",
+        "파오후",
+        "아줌마",
+        "학생",
+        "매니저",
+        "깡패"
+      ],
+      "이미지_주소": "https://d1orkkc34keaka.cloudfront.net/images/2018/01/04/1515048796_e1870792fb36b0e384a6d18695f11072.jpeg"
+    },
+    "촬영장": {
+      "역할": [
+        "감독",
+        "음향감독",
+        "촬영감독",
+        "카메라맨",
+        "여배우",
+        "남배우",
+        "엑스트라",
+        "코디네이터",
+        "견학생",
+        "조명 들어주는 사람"
+      ],
+      "이미지_주소": "http://lampers.co.kr/wp-content/uploads/2018/07/DSC_1451.jpg"
+    },
+    "남극기지": {
+      "역할": [
+        "과학자",
+        "탐험대장",
+        "기상학자",
+        "설인",
+        "펭귄",
+        "의사",
+        "통신원",
+        "관측가",
+        "남극곰",
+        "냉동인간"
+      ],
+      "이미지_주소": "https://file2.nocutnews.co.kr/newsroom/image/2014/02/12/20140212114226757393.jpg"
+    },
+    "여객선": {
+      "역할": [
+        "선장",
+        "요리사",
+        "뮤지션",
+        "부자",
+        "바텐더",
+        "웨이터",
+        "쉐프",
+        "일반손님",
+        "진상손님",
+        "조타수"
+      ],
+      "이미지_주소": "hhttps://post-phinf.pstatic.net/MjAxOTA4MjJfMjY1/MDAxNTY2NDYxMDU1MjU2.QqYaR_urrYBaq8bFeWttPKUBnK2hxXJDc0vKnI2nWbgg.coJfImYNa7sw2yHe8fsaF3uxXl7_CCzZ1kwJ2npvKkkg.JPEG/IMG_1428.jpg?type=w1200"
+    },
+    "대학": {
+      "역할": [
+        "교수",
+        "재학생",
+        "졸업생",
+        "학생회장",
+        "견학생",
+        "조교",
+        "화석",
+        "신입생",
+        "인싸",
+        "아싸"
+      ],
+      "이미지_주소": "https://blog.kakaocdn.net/dn/bpF7W4/btqEep8awFQ/VtHiMGHmGhf1Y6jc3pirK1/img.jpg"
+    },
+    "우주정거장": {
+      "역할": [
+        "총 관리자",
+        "과학자",
+        "연구원",
+        "의사",
+        "외계인",
+        "우주 관광객",
+        "정비사",
+        "조종사",
+        "통신사",
+        "프로그래머"
+      ],
+      "이미지_주소": "hhttp://image.dongascience.com/Photo/2019/01/989256db6777c4f2dfe6b7ccf695122f.jpg"
+    },
+    "호텔": {
+      "역할": [
+        "매니저",
+        "경비원",
+        "손님",
+        "접수원",
+        "바텐더",
+        "쉐프",
+        "청소부",
+        "오너",
+        "외국인 관광객",
+        "주차장 관리 요원"
+      ],
+      "이미지_주소": "https://exp.cdn-hotels.com/hotels/10000000/9670000/9661300/9661214/ce78724f_z.jpg?impolicy=fcrop&w=500&h=333&q=medium"
+    },
+    "학교": {
+      "역할": [
+        "교장선생님",
+        "과학선생님",
+        "외국어선생님",
+        "학생",
+        "불량 학생",
+        "공익",
+        "학부모",
+        "중2병",
+        "국어선생님",
+        "체육선생님"
+      ],
+      "이미지_주소": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Gwanyang_High_School%2C_Photographed_from_Gwanyang-dong_Hyundai_Apartment_rooftop.jpg/270px-Gwanyang_High_School%2C_Photographed_from_Gwanyang-dong_Hyundai_Apartment_rooftop.jpg"
+    },
+    "병원": {
+      "역할": [
+        "병원장",
+        "의사",
+        "간호사",
+        "인턴",
+        "환자",
+        "보호자",
+        "접수원",
+        "청소부",
+        "시체",
+        "응급환자"
+      ],
+      "이미지_주소": "http://www.amc.seoul.kr/asan/images/hospitalinfo/img_introRolling02.jpg"
+    },
+    "놀이공원": {
+      "역할": [
+        "손님",
+        "경비원",
+        "정비공",
+        "노점상",
+        "어린이",
+        "외국인 관광객",
+        "인형옷 알바",
+        "광대",
+        "귀신 역할 알바",
+        "부모님"
+      ],
+      "이미지_주소": "https://www.travel.taipei/image/65598/1024x768"
+    },
+    "클럽": {
+      "역할": [
+        "가드",
+        "DJ",
+        "단골",
+        "스트리퍼",
+        "호객꾼",
+        "바텐더",
+        "주정뱅이",
+        "매니저",
+        "춤꾼",
+        "입구컷 당한 사람"
+      ],
+      "이미지_주소": "https://img.hankyung.com/photo/etcimage/201903/20190318174812_1545.jpg"
+    },
+    "여객기": {
+      "역할": [
+        "일반 손님",
+        "퍼스트 클래스 손님",
+        "기장",
+        "밀입국자",
+        "승무원",
+        "시끄러운 꼬마",
+        "잠이 많은 손님",
+        "외국인",
+        "비즈니스 클래스 손님",
+        "부기장"
+      ],
+      "이미지_주소": "https://cphoto.asiae.co.kr/listimglink/6/2015051808103786657_1.jpg"
+    },
+    "카지노": {
+      "역할": [
+        "딜러",
+        "타짜",
+        "경비",
+        "가드",
+        "인생 망한 사람",
+        "매니저",
+        "바텐더",
+        "주정뱅이",
+        "호구",
+        "사기꾼"
+      ],
+      "이미지_주소": "https://www.ramadajeju.co.kr/RamadaPlazaJeju_common/images/homepage/facilities/CASINO03.jpg"
+    },
+    "묘지": {
+      "역할": [
+        "도굴범",
+        "관리인",
+        "퇴마사",
+        "유튜버",
+        "슬픈 과부",
+        "장의사",
+        "귀신",
+        "좀비",
+        "뱀파이어",
+        "신부님"
+      ],
+      "이미지_주소": "https://t1.daumcdn.net/thumb/R720x0/?fname=http://t1.daumcdn.net/brunch/service/user/8lAL/image/KOmqMkHp3RBoKx1OL3g_yOUZ0m8.jpg"
+    },
+    "카페": {
+      "역할": [
+        "바리스타",
+        "손님",
+        "단골손님",
+        "방금 차인 애인",
+        "방금 애인 찬 사람",
+        "작가",
+        "뮤지션",
+        "틀딱",
+        "진상",
+        "대학생"
+      ],
+      "이미지_주소": "https://lh3.googleusercontent.com/proxy/jKb2HUBLSOMv-32hb2rIaaT14fLtIJOJnqCeffnRpfj8PX51KgRUK2Uc7TagMwZO9gGyASg9SGCN8DE16NZyg1E"
+    },
+    "지하철": {
+      "역할": [
+        "기관사",
+        "공익",
+        "틀딱",
+        "노숙자",
+        "주정뱅이",
+        "바보",
+        "회사원",
+        "학생",
+        "지하철 도우미",
+        "꼬마"
+      ],
+      "이미지_주소": "https://www.theguru.co.kr/data/photos/20201146/art_16051584923657_08df16.jpg"
+    },
+    "광산": {
+      "역할": [
+        "신입 광부",
+        "광부",
+        "광산 주인",
+        "광부 팀장",
+        "도굴꾼",
+        "안전요원",
+        "가스 검사관",
+        "박쥐",
+        "의료진",
+        "폭탄 관리인"
+      ],
+      "이미지_주소": "https://img.lovepik.com/photo/50045/0425.jpg_wh860.jpg"
+    },
+    "할리우드": {
+      "역할": [
+        "블랙 팬서",
+        "아이언맨",
+        "스파이더맨",
+        "슈퍼맨",
+        "베트맨",
+        "헐크",
+        "캡틴 아메리카",
+        "타노스",
+        "조커",
+        "해리포터"
+      ],
+      "이미지_주소": "https://lh3.googleusercontent.com/proxy/jKb2HUBLSOMv-32hb2rIaaT14fLtIJOJnqCeffnRpfj8PX51KgRUK2Uc7TagMwZO9gGyASg9SGCN8DE16NZyg1E"
+    },
+    "니버하우스": {
+      "역할": [
+        "토마",
+        "보끔",
+        "점비",
+        "이엘",
+        "민삐",
+        "얄루",
+        "윤우",
+        "수미",
+        "용민",
+        "그레",
+        "엔닐",
+        "더럴이",
+        "승우",
+        "은똥",
+        "고민",
+        "베찌",
+        "설이"
+      ],
+      "이미지_주소": "https://lh3.googleusercontent.com/proxy/jKb2HUBLSOMv-32hb2rIaaT14fLtIJOJnqCeffnRpfj8PX51KgRUK2Uc7TagMwZO9gGyASg9SGCN8DE16NZyg1E"
+    }
+  }
+}
