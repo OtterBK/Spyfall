@@ -20,7 +20,7 @@ import operator
 
 class Config(enumerate):
     BOT_PREFIX = "~"
-    TOKEN = "ODQxOTc4NzQ0MjYwMzk1MDI5.YJunzw.UXAHspHamW04R1uoxETrMItmR5Q" # 여기에 봇 토큰 입력
+    TOKEN = "" # 여기에 봇 토큰 입력
     VERSION = "1.0.0"
 
     BGM_PATH = os.getcwd() + "\\bgm\\"
@@ -134,6 +134,14 @@ def getClockIcon(leftTime, maxTime): #시계 아이콘 반환
 #### 기본 설정
 bot = commands.Bot(command_prefix=Config.BOT_PREFIX)  # 봇 커맨드 설정
 random.seed() #시드 설정
+
+if Config.TOKEN == "":
+    try:
+        f = open(os.getcwd() + "\\token.txt", 'r', encoding="utf-8" )
+        Config.TOKEN = f.readline().strip()
+        f.close()
+    except:
+        print("토큰 로드 에러")
 
 def __get_logger():
     """로거 인스턴스 반환
