@@ -22,8 +22,11 @@ class Config(enumerate):
     BOT_PREFIX = "~"
     TOKEN = "" # 여기에 봇 토큰 입력
     VERSION = "1.0.0"
+    LAST_PATCH = "21/05/14"
+    EMAIL_ADDRESS = "otter6975@gmail.com"
+    BOT_LINK = ""
 
-    BGM_PATH = os.getcwd() + "\\bgm\\"
+    BGM_PATH = os.getcwd() + "/bgm/"
 
 class EMOJI_ICON(enumerate):
     JOIN = "✋"
@@ -44,6 +47,11 @@ class EMOJI_ICON(enumerate):
     ICON_VOTE = "📩"
     ICON_TIP = "🔖"
     ICON_ANSWER = "🖲"
+    ICON_PHONE = "📱"
+    ICON_MAIL = "📧"
+    ICON_GIT = "🌐"
+    ICON_FIX = "🛠️"
+    ICON_BOOK_RED = "📕"
 
     CLOCK_0 = "🕛"
     CLOCK_1 = "🕐"
@@ -137,10 +145,12 @@ random.seed() #시드 설정
 
 if Config.TOKEN == "":
     try:
-        f = open(os.getcwd() + "\\token.txt", 'r', encoding="utf-8" )
+        path = os.getcwd() + "/token.txt"
+        f = open(path, 'r', encoding="utf-8" )
         Config.TOKEN = f.readline().strip()
         f.close()
     except:
+        print(path)
         print("토큰 로드 에러")
 
 def __get_logger():
@@ -325,7 +335,7 @@ class GameFrame(Frame): # 게임 진행 프레임
         self._notice_visible = True
         self._notice_text = EMOJI_ICON.ICON_NOTE + " **[ @닉네임 ]** 으로 맨션 기능을 \n사용해 질문이 가능합니다.\n" + chr(173) + "\n"
         self._notice_text += EMOJI_ICON.ICON_ANSWER + " 스파이는 [ "+Config.BOT_PREFIX+"정답 ] 명령어로 \n정답을 맞출 수 있습니다.\n" + chr(173) + "\n"
-        self._notice_text += EMOJI_ICON.ICON_DOWN + " 맵 목록.**\n" + chr(173) + "\n"
+        self._notice_text += EMOJI_ICON.ICON_DOWN + " **맵 목록.**\n" + chr(173) + "\n"
 
         self._field_visible = True
 
@@ -687,7 +697,7 @@ class Gamedata:
 
 
     def loadMapAndRole(self):
-        dataFile = os.getcwd() + "\\MapAndRole" + ".json"
+        dataFile = os.getcwd() + "/MapAndRole" + ".json"
         gameFrame = self._gameFrame
 
         if os.path.isfile(dataFile):
@@ -1059,8 +1069,27 @@ gameData = dict()
 
 
 #### 함수
-def helpMessage(ctx):
-    asyncio.ensure_future(ctx.send("도움말 출력"))
+async def helpMessage(ctx): #도움말
+    sendStr = EMOJI_ICON.ICON_TIP + "[ 도움말 ]\n" + chr(173) + "\n"
+    sendStr += EMOJI_ICON.ICON_BOOK_RED + " ~스파이폴 - 게임을 시작합니다.\n"
+    sendStr += EMOJI_ICON.ICON_BOOK_RED + " ~중지 - 게임을 강제로 중지합니다.\n"
+
+    sendStr += chr(173) + "\n"
+
+    sendStr += "봇 이름:　" + "스파이폴\n"
+    sendStr += "봇 버전:　" + Config.VERSION + "\n"
+    sendStr += "제작 　:　제육보끔#1916\n"
+    sendStr += "패치일 :　" + Config.LAST_PATCH + "\n"
+
+    sendStr += chr(173) + "\n"
+
+    sendStr += EMOJI_ICON.ICON_PHONE + " Contact\n" +chr(173) + "\n"
+    sendStr += EMOJI_ICON.ICON_MAIL + " 이메일:　" + Config.EMAIL_ADDRESS + "\n"
+    sendStr += EMOJI_ICON.ICON_BOOK_RED + " 봇 공유링크:　"+Config.BOT_LINK + "\n"
+    sendStr += EMOJI_ICON.ICON_GIT + " 깃허브:　"+"https://github.com/OtterBK/Spyfall" + "\n"
+    sendStr += chr(173) + "\n" + EMOJI_ICON.ICON_FIX + "버그 제보, 개선점, 건의사항이 있다면 상단 이메일 주소로 알려주세요!\n" + chr(173) + "\n"
+
+    asyncio.ensure_future(ctx.send("```" + chr(173) +"\n" + str(sendStr) + "\n```"))
 
 
 async def clearChat(exclude, chatChannel): #메시지 삭제
@@ -1170,7 +1199,7 @@ def playBGM(voice, bgmType): #BGM 틀기
 async def on_ready():
     Logger.info(f'{bot.user} 활성화됨')
     await bot.change_presence(status=discord.Status.online) #온라인
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="시작: ~스파이폴"))
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name="~도움말"))
 
     Logger.info("봇 이름:" + str(bot.user.name) + ", 봇 아이디:" + str(bot.user.name) + ", 봇 버전:" + discord.__version__)
     for guild in bot.guilds:
@@ -1184,6 +1213,10 @@ async def pingCommand(ctx):  # ping 테스트
 @bot.command(pass_context=False, aliases=["도움", "도움말","명령어", "commands"])  # 도움말 명령어 입력시
 async def helpCommand(ctx):  # 도움말
     asyncio.ensure_future(helpMessage(ctx))
+
+@bot.command(pass_context=False, aliases=["규칙"])  # 규칙 명령어 입력시
+async def ruleCommand(ctx):  # 도움말
+    asyncio.ensure_future(ctx.send("https://youtu.be/c_MXwC4tdg8"))
 
 @bot.command(pass_context=False, aliases=["스파이폴"])  # 스파이폴 명령어 입력시
 async def spyfallCommand(ctx, gamesrc=None):  # 보드게임 선택 UI 생성
