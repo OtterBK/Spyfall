@@ -20,8 +20,10 @@ import operator
 
 class Config(enumerate):
     BOT_PREFIX = "~"
-    TOKEN = "" # 여기에 봇 토큰 입력
+    TOKEN = "ODQxOTc4NzQ0MjYwMzk1MDI5.YJunzw.UXAHspHamW04R1uoxETrMItmR5Q" # 여기에 봇 토큰 입력
     VERSION = "1.0.0"
+
+    BGM_PATH = os.getcwd() + "\\bgm\\"
 
 class EMOJI_ICON(enumerate):
     JOIN = "✋"
@@ -61,6 +63,21 @@ class EMOJI_ICON(enumerate):
         , "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
     NUMBER = [ "0️⃣", "1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟"]
     ICON_HUMAN = ["👮‍♀️","🕵️‍♀️","🕵️‍♂️","💂‍♂️","💂‍♀️","👷‍♀️","👷‍♂️","👩‍⚕️","👨‍⚕️","👩‍🎓","👨‍🎓","👩‍🏫","👨‍🏫","👩‍⚖️","👨‍⚖️","👩‍🌾","👨‍🌾","👩‍🍳","👨‍🍳","👩‍🔧","👩‍🏭","👨‍🔧","👨‍🏭","👩‍💼","👨‍💼","👩‍🔬","👨‍🔬","👩‍💻","👨‍💻","👩‍🎤","👨‍🎤","👩‍🎨","👨‍🎨","👩‍✈️","👨‍✈️","👩‍🚀","👨‍🚀","👩‍🚒","👨‍🚒","🧕","👰","🤵","🤱","🤰","🦸‍♀️","🦸‍♂️","🦹‍♀️","🦹‍♂️","🧙‍♀️","🧙‍♂️","🧚‍♀️","🧚‍♂️","🧛‍♀️","🧛‍♂️","🧜‍♀️","🧝‍♀️","🧝‍♂️","🧟‍♀️","🧟‍♂️"]
+
+
+class BGM_TYPE(enumerate):
+    PLING = 1
+    ROUND_ALARM = 2
+    SCORE_ALARM = 3
+    ENDING = 4
+    FAIL = 5
+    countdown10 = 6
+    SUCCESS = 7
+    BELL = 8
+    LONGTIMER = 9
+    CARD_DRAW = 10
+    CHANGE_BADGE = 11
+    VOTE_TIME = 12
 
 
 def getAlphabetFromIndex(index):
@@ -262,6 +279,7 @@ class LobbyFrame(Frame):
 
         if str(emoji) == str(EMOJI_ICON.JOIN): # 참가 이모지 누른거라면
             if not user.id in gameData._ingamePlayer.keys():
+                playBGM(gameData._voice, BGM_TYPE.PLING)
                 gameData._ingamePlayer[user.id] = Playerdata(user) # 플레이어 데이터 생성
                 await self.update() # 프레임 업데이트
         elif str(emoji) == str(EMOJI_ICON.START): # 시작 이모지 누른거라면
@@ -344,7 +362,7 @@ class CardFrame(Frame):
 
         if map != "" and role != "" and not isShowcard:
             self._notice_visible = True
-            self._notice_text = "당신은 **"+map+"**에 있는 **" + role+"**입니다! 역할에 몰입하세요!"
+            self._notice_text = "당신은 **"+map+"**에 있는 **" + role+"**입니다! \n역할에 몰입하세요!"
         else:
             self._notice_visible = False
 
@@ -371,6 +389,39 @@ class CardFrame(Frame):
         if isShowcard:
             self._author = user
 
+
+class ResultFrame(Frame):
+    def __init__(self, gameData, winText):
+        super().__init__() #frame 초기화
+
+        self._title_text = chr(173)+"[　　　　"+ EMOJI_ICON.ICON_GAME +" 결과 공개　　　　]"
+
+        self._sub_visible = True
+        self._sub_text = winText
+
+        self._main_visible = False
+
+        self._notice_visible = True
+        self._notice_text = EMOJI_ICON.ICON_MAP+" 장소: **" + gameData._nowMap + "**"
+
+        self._field_visible = True
+        for player in gameData._ingamePlayer.values():
+            self.addField(player._user.display_name, "[ "+player._role + " ]")
+
+        self._customFooter_visible = True
+        self._customFooter_text = ""
+
+        self._page_visible = False
+
+        self._path_visible = False
+
+        self._image_visible = True
+        data = gameData._mapAndRole
+        map = gameData._nowMap
+        mapUrl = data[map]['이미지_주소']
+        self._image_url = mapUrl
+
+        self._embedColor = discord.Color.green()
 
 def getEmbedFromFrame(frame): #frame으로 embed 생성
 
@@ -502,8 +553,10 @@ class GAME_STEP(enumerate):
     
 
 class Gamedata:
-    def __init__(self, guild, message, owner):
+    def __init__(self, guild, message, owner, voice):
         self._maxPlayer = 12
+
+        self._voice = voice
 
         self._guild = guild
         self._frameStack = []
@@ -524,6 +577,7 @@ class Gamedata:
         self._isAnswering = False
 
         self._nowMap = "" # 현재 맵
+        self._question_from = None # 현재 질문자 ID
         self._question_target = None # 현재 답변자 id
 
         self._gameFrame = None
@@ -539,6 +593,8 @@ class Gamedata:
         self._gameFrame = GameFrame()
         for player in self._ingamePlayer.values():
             self._gameFrame.addField(player._user.display_name, EMOJI_ICON.ICON_CARD)
+
+        playBGM(self._voice, BGM_TYPE.ROUND_ALARM)
 
         tmpEmbed = discord.Embed(
             title="초기화중... 잠시만 기다려주세요.", url="", description="\n▽", color=discord.Color.dark_magenta())
@@ -556,12 +612,19 @@ class Gamedata:
 
         self.setMap()
 
+        await asyncio.sleep(3)
+
+        for player in self._ingamePlayer.keys(): # 역할 배포 효과음
+            await asyncio.sleep(0.3)
+            playBGM(self._voice, BGM_TYPE.CARD_DRAW)
+
         self.setRole()
 
         rdID = random.choice(list(self._ingamePlayer.keys()))
-        self.setQuestionTarget(rdID)
+        self.setQuestionTarget(None,rdID)
 
-        await self.sendCard()
+        for player in self._ingamePlayer.values():
+            await self.sendCard(player, isShowcard=False)
 
         self._gameStep = GAME_STEP.INGAME
         await self.timer()
@@ -585,13 +648,23 @@ class Gamedata:
 
         self._gameStep = GAME_STEP.RESULT
 
-        await self.showCard() # 직업 공개
+        # await self.showCard() # 직업 공개
+
+        await asyncio.sleep(2)
+
+        asyncio.ensure_future(self._chatChannel.send("```"+EMOJI_ICON.ICON_TIP+"지목된 플레이어의 정체는...?```"))
+
+        await asyncio.sleep(3)
+
 
         isCollect = True
         for user in self._votedPlayer:
             player = self._ingamePlayer[user.id]
+            await self.sendCard(player, isShowcard=True)
             if player._role != self._spyName:
                 isCollect = False
+
+        await asyncio.sleep(3)
 
         if isCollect:
             await self.civilWin()
@@ -651,37 +724,25 @@ class Gamedata:
                 player._role = role
                 del roleList[rd]
 
+    def setQuestionTarget(self, fromID, targetID):
+        self._question_from = fromID
+        self._question_target = targetID
+        playBGM(self._voice, BGM_TYPE.CHANGE_BADGE)
 
-    def setQuestionTarget(self, userID):
-        self._question_target = userID
-
-
-    async def sendCard(self): # 장소와 역할을 dm으로 보내줌
-
+    async def sendCard(self, player, isShowcard=False):
         data = self._mapAndRole
         map = self._nowMap
         mapUrl = data[map]['이미지_주소']
 
-        for player in self._ingamePlayer.values():
-            if player._role == self._spyName:
-                card = CardFrame(self._spyMap, player._role, self._spyUrl, self._guild.name)
-            else:
-                card = CardFrame(map, player._role, mapUrl, self._guild.name)
-            embed = getEmbedFromFrame(card)
-            asyncio.ensure_future(player._user.send(embed=embed))
-
-    async def showCard(self): # 역할 공개
-        data = self._mapAndRole
-        map = self._nowMap
-        mapUrl = data[map]['이미지_주소']
-
-        for player in self._ingamePlayer.values():
-            if player._role == self._spyName:
-                card = CardFrame(self._spyMap, player._role, self._spyUrl, self._guild.name, isShowcard=True, user=player._user)
-            else:
-                card = CardFrame(map, player._role, mapUrl, self._guild.name, isShowcard=True, user=player._user)
-            embed = getEmbedFromFrame(card)
+        if player._role == self._spyName:
+            card = CardFrame(self._spyMap, player._role, self._spyUrl, self._guild.name, isShowcard, user=player._user)
+        else:
+            card = CardFrame(map, player._role, mapUrl, self._guild.name, isShowcard, user=player._user)
+        embed = getEmbedFromFrame(card)
+        if isShowcard:
             asyncio.ensure_future(self._chatChannel.send(embed=embed))
+        else:
+            asyncio.ensure_future(player._user.send(embed=embed))
 
 
     async def timer(self): # 타이머 카운트다운
@@ -689,8 +750,29 @@ class Gamedata:
         gameFrame = self._gameFrame
 
         while True:
-            gameFrame._sub_text = EMOJI_ICON.ICON_QUESTION + "현재 답변자: **[ " + gameData._ingamePlayer[gameData._question_target]._user.display_name + " ]**\n"
+
+            if gameData._question_from == None:
+                question_fromName = ""
+            else:
+                question_fromName = gameData._ingamePlayer[gameData._question_from]._user.display_name
+
+            question_targetName = gameData._ingamePlayer[gameData._question_target]._user.display_name
+
+            gameFrame._sub_text = "```"
+            gameFrame._sub_text += EMOJI_ICON.ICON_QUESTION + "현재 질문자: **[ " + question_fromName + " ]**\n"
+            gameFrame._sub_text += EMOJI_ICON.ICON_ANSWER + "현재 답변자: **[ " + question_targetName + " ]**\n"
+            gameFrame._sub_text += "```"
             gameFrame._customFooter_text = getClockIcon(gameData._leftTime, gameData._maxTime) + " 투표까지 " + str(gameData._leftTime)+"초" # 남은 시간 표시
+
+            gameFrame._field_text.clear()
+            for player in gameData._ingamePlayer.values():
+                if gameData._question_from == player._user.id:
+                    gameData._gameFrame.addField(player._user.display_name, EMOJI_ICON.ICON_QUESTION)
+                elif gameData._question_target == player._user.id:
+                    gameData._gameFrame.addField(player._user.display_name, EMOJI_ICON.ICON_ANSWER)
+                else:
+                    gameData._gameFrame.addField(player._user.display_name, EMOJI_ICON.ICON_CARD)
+
             await self.updateUI()
             if self._leftTime <= 0 or self._gameStep != GAME_STEP.INGAME:
                 break
@@ -701,6 +783,7 @@ class Gamedata:
     async def answerSpy(self, user, place):
 
         gameData = self
+        print(gameData._nowMap)
 
         if user.id in self._ingamePlayer: # 게임 참가중이라면
             player = self._ingamePlayer[user.id]
@@ -708,16 +791,19 @@ class Gamedata:
                 if gameData._gameStep == GAME_STEP.INGAME: # 게임 진행 중 상태면
                     if not self._isAnswering:
                         gameData._gameStep = GAME_STEP.TOTALIZE
+                        playBGM(self._voice, BGM_TYPE.SCORE_ALARM)
+                        for player in self._ingamePlayer.values():
+                            if player._role == self._spyName: # 스파이들 정체 공개
+                                await self.sendCard(player, isShowcard=True)
                         asyncio.ensure_future(self._chatChannel.send("```" + EMOJI_ICON.ICON_TIP + " " +"스파이가 자신의 정체를 공개하였습니다.\n" + "스파이는 모두가 있는 장소를 맞춰주세요.\n["+Config.BOT_PREFIX+"정답 <장소이름>] 명령어를 사용해 입력하세요.```"))
                         await self.answerTimer()
                         if self._answer_leftTime <= 0: # 시간 초과면
-
-                            await self.showCard()
-    
                             await self.civilWin()
                 elif gameData._gameStep == GAME_STEP.TOTALIZE:
                     if self._isAnswering:
-                        await self.showCard()
+                        asyncio.ensure_future(self._chatChannel.send("```제출한 답: "+place+"```"))
+                        asyncio.ensure_future(self._chatChannel.send("```"+EMOJI_ICON.ICON_TIP+"정답은 과연...?```"))
+                        await asyncio.sleep(3)
 
                         if place == self._nowMap: #정답 맞췄다면
                             await self.spyWin() # 스파이 승리
@@ -812,6 +898,8 @@ class Gamedata:
 
         while True:
 
+            playBGM(self._voice, BGM_TYPE.VOTE_TIME)
+
             self._vote_leftTime = self._vote_maxTime
 
             for player in self._ingamePlayer.values():
@@ -846,6 +934,7 @@ class Gamedata:
             await self.voteTimer()
 
             topPlayer = self.totalizeVote()
+            playBGM(self._voice, BGM_TYPE.SCORE_ALARM)
             if topPlayer != None:
 
                 if topPlayer in self._votedPlayer: # 이미 투표된 플레이어면
@@ -858,6 +947,7 @@ class Gamedata:
             else:
                 asyncio.ensure_future(self._chatChannel.send("```" + EMOJI_ICON.ICON_TIP + " " + "최다 득표를 받은 플레이어가 없습니다. 재투표를 진행합니다.```"))
                 continue
+
 
 
     def totalizeVote(self):
@@ -884,12 +974,29 @@ class Gamedata:
         return topPlayer
 
 
+
     async def spyWin(self):
+        playBGM(self._voice, BGM_TYPE.SUCCESS)
         asyncio.ensure_future(self._chatChannel.send("```멋쟁이 스파이 팀이 승리하였습니다.```"))
+        winText = "```"+EMOJI_ICON.ICON_TIP+" [ 스파이팀 승리! ]```"
+
+        resultFrame = ResultFrame(self, winText)
+        embed = getEmbedFromFrame(resultFrame)
+
+        asyncio.ensure_future(self._chatChannel.send(embed=embed))
+
         await self.endGame() # 게임 종료
 
     async def civilWin(self):
+        playBGM(self._voice, BGM_TYPE.SUCCESS)
         asyncio.ensure_future(self._chatChannel.send("```멋쟁이 시민 팀이 승리하였습니다.```"))
+        winText = "```"+EMOJI_ICON.ICON_TIP+" [ 시민팀 승리! ]```"
+
+        resultFrame = ResultFrame(self, winText)
+        embed = getEmbedFromFrame(resultFrame)
+
+        asyncio.ensure_future(self._chatChannel.send(embed=embed))
+
         await self.endGame() # 게임 종료
 
 
@@ -897,6 +1004,7 @@ class Gamedata:
         self._gameStep = GAME_STEP.FINISH
         del gameData[self._guild.id] # 게임 데이터 삭제
         asyncio.ensure_future(self._chatChannel.send("```게임이 종료되었습니다.```"))
+        await self._voice.disconnect()
 
 
     async def on_message(self, message):
@@ -912,7 +1020,14 @@ class Gamedata:
             if self._gameStep == GAME_STEP.INGAME: # 게임 진행중이면
                 isRemoveMsg = True
                 if user.id == self._question_target: # 질문 뱃지 가지고 있다면
-                    self.setQuestionTarget(target.id) # 뱃지 변경
+                    if self._question_from == None or self._question_from != target.id: # 이전 질문자가 아니라면
+                        if self._question_target == user.id: # 자신에게 한 거라면
+                            asyncio.ensure_future(user.send("```스스로에게 질문할 수 없습니다.```"))
+                        else:
+                            self.setQuestionTarget(user.id, target.id) # 뱃지 변경
+                    else:
+                        asyncio.ensure_future(user.send("```당신에게 질문한 사람에게는 바로 다시 질문할 수 없습니다.```"))
+
 
             elif self._gameStep == GAME_STEP.TOTALIZE: # 투표 등등 진행중이면
                 isRemoveMsg = True
@@ -960,6 +1075,38 @@ def getGamedata(guildID):
 
 async def sendLobbyMessage(ctx):
 
+    guild = ctx.guild
+    chattingChannel = ctx.message.channel  # 퀴즈할 채팅 채널 얻기
+    owner = ctx.message.author
+
+    if owner.voice == None:
+        await ctx.send("```"+EMOJI_ICON.ICON_WARN + " 먼저 음성 채널에 참가해주세요.```")
+        return
+
+    voiceChannel = owner.voice.channel  # 호출자의 음성 채널 얻기
+
+    isSuccess = False
+    voice = get(bot.voice_clients, guild=guild)
+    if voice == None or not voice.is_connected():  # 음성 연결 안됐다면
+        try:
+            voice = await voiceChannel.connect()  # 음성 채널 연결후 해당 객체 반환
+            isSuccess = True
+        except: #보통 Already voice connected 문제 발생시
+            isSuccess = False
+            Logger.error(traceback.format_exc())
+            asyncio.ensure_future(chattingChannel.send("❗ 예기치 못한 문제가 발생하였습니다. 재시도해주세요. \n해당 문제가 지속적으로 발생할 시 \n💌 [ "+Config.EMAIL_ADDRESS+" ] 으로 문의바랍니다.\n"))
+            if voice == None:
+                asyncio.ensure_future(chattingChannel.send("voice == None"))
+            elif voice.is_connected():
+                asyncio.ensure_future(chattingChannel.send("voice is connected"))
+            await voice.move_to(voiceChannel)
+            await asyncio.sleep(1)
+            await voice.disconnect() #보이스 강제로 연결끊기
+
+    if not isSuccess:
+        tmpVoice = get(bot.voice_clients, channel=voiceChannel)
+        tmpVoice.disconnect()
+
     frame = LobbyFrame()
 
     tmpEmbed = discord.Embed(
@@ -967,7 +1114,9 @@ async def sendLobbyMessage(ctx):
 
     message = await ctx.send(embed=tmpEmbed)
 
-    gameData[ctx.guild.id] = Gamedata(ctx.guild, message, ctx.message.author) # 게임 데이터 등록
+    gameData[ctx.guild.id] = Gamedata(ctx.guild, message, ctx.message.author, voice) # 게임 데이터 등록
+
+    playBGM(voice, BGM_TYPE.BELL)
 
     asyncio.ensure_future(message.add_reaction(EMOJI_ICON.JOIN)) # 참여
     asyncio.ensure_future(message.add_reaction(EMOJI_ICON.START)) # 시작
@@ -975,6 +1124,37 @@ async def sendLobbyMessage(ctx):
     await showFrame(message, frame, isPopUp=False)
 
     return message
+
+
+def playBGM(voice, bgmType): #BGM 틀기
+    try:
+        if(bgmType == BGM_TYPE.PLING):
+            source = discord.FFmpegPCMAudio(Config.BGM_PATH + "pling.mp3")
+        elif(bgmType == BGM_TYPE.ROUND_ALARM):
+            source = discord.FFmpegPCMAudio(Config.BGM_PATH + "ROUND_ALARM.mp3")
+        elif(bgmType == BGM_TYPE.SCORE_ALARM):
+            source = discord.FFmpegPCMAudio(Config.BGM_PATH + "SCORE_ALARM.mp3")
+        elif(bgmType == BGM_TYPE.ENDING):
+            source = discord.FFmpegPCMAudio(Config.BGM_PATH + "ENDING.mp3")
+        elif(bgmType == BGM_TYPE.FAIL):
+            source = discord.FFmpegPCMAudio(Config.BGM_PATH + "FAIL.mp3")
+        elif(bgmType == BGM_TYPE.countdown10):
+            source = discord.FFmpegPCMAudio(Config.BGM_PATH + "countdown10.wav")
+        elif(bgmType == BGM_TYPE.SUCCESS):
+            source = discord.FFmpegPCMAudio(Config.BGM_PATH + "SUCCESS.mp3")
+        elif(bgmType == BGM_TYPE.BELL):
+            source = discord.FFmpegPCMAudio(Config.BGM_PATH + "bell.mp3")
+        elif(bgmType == BGM_TYPE.CARD_DRAW):
+            source = discord.FFmpegPCMAudio(Config.BGM_PATH + "CARD_DRAW.mp3")
+        elif(bgmType == BGM_TYPE.CHANGE_BADGE):
+            source = discord.FFmpegPCMAudio(Config.BGM_PATH + "CHANGE_BADGE.mp3")
+        elif(bgmType == BGM_TYPE.VOTE_TIME):
+            source = discord.FFmpegPCMAudio(Config.BGM_PATH + "VOTE_TIME.mp3")
+
+        voice.play(source)
+    except:
+        Logger.error("error01 - voice is not connect error")
+        Logger.error(traceback.format_exc())
 
 
 #### 이벤트
@@ -1001,11 +1181,13 @@ async def helpCommand(ctx):  # 도움말
 async def spyfallCommand(ctx, gamesrc=None):  # 보드게임 선택 UI 생성
     if gamesrc == None:
         guild = ctx.guild #서버
+        if guild == None:
+            return
         gameData = getGamedata(guild.id)
         
         if gameData != None: # 게임 진행중이면
             if gameData._gameStep != GAME_STEP.LOBBY: # 게임 진행 중 상태면
-                asyncio.ensure_future(ctx.send("```" + EMOJI_ICON.ICON_TIP + " " + "먼저 진행중인 스파이폴 게임을 중지해주세요.```"))
+                asyncio.ensure_future(ctx.send("```" + EMOJI_ICON.ICON_TIP + " " + "먼저 진행중인 스파이폴 게임을 중지해주세요.\n[ ~중지 ]```"))
                 return
                 
         await sendLobbyMessage(ctx)
@@ -1019,7 +1201,19 @@ async def answerCommand(ctx, gamesrc=None):  # 보드게임 선택 UI 생성
     if gameData != None: # 게임 진행중이면
         await gameData.answerSpy(ctx.message.author, gamesrc)
 
+@bot.command(pass_context=False, aliases=["중지"])  # 정답 명령어 입력시
+async def stopCommand(ctx, gamesrc=None):  # 보드게임 선택 UI 생성
+    guild = ctx.guild #서버
+    gameData = getGamedata(guild.id)
+    user = ctx.message.author
 
+    if gameData != None: # 게임 진행중이면
+        if gameData._owner.id == user.id: 
+            gameData.endGame()
+        else:
+            asyncio.ensure_future(ctx.send("```" + EMOJI_ICON.ICON_TIP + " " + "게임 주최자 [ "+gameData._owner.display_name + " ] 님만이 중지할 수 있습니다.```")) #이벤트 동작
+    else:
+        asyncio.ensure_future(ctx.send("```" + EMOJI_ICON.ICON_TIP + " " + "진행 중인 게임이 없습니다.```"))
 
 
 @bot.event
