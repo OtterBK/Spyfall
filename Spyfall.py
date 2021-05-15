@@ -1250,7 +1250,7 @@ async def stopCommand(ctx, gamesrc=None):  # 보드게임 선택 UI 생성
 
     if gameData != None: # 게임 진행중이면
         if gameData._owner.id == user.id: 
-            gameData.endGame()
+            await gameData.endGame()
         else:
             asyncio.ensure_future(ctx.send("```" + EMOJI_ICON.ICON_TIP + " " + "게임 주최자 [ "+gameData._owner.display_name + " ] 님만이 중지할 수 있습니다.```")) #이벤트 동작
     else:
