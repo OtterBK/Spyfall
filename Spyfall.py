@@ -1039,7 +1039,7 @@ class Gamedata:
                 isRemoveMsg = True
                 if user.id == self._question_target: # 질문 뱃지 가지고 있다면
                     if self._question_from == None or self._question_from != target.id: # 이전 질문자가 아니라면
-                        if self._question_target == user.id: # 자신에게 한 거라면
+                        if target.id == user.id: # 자신에게 한 거라면
                             asyncio.ensure_future(user.send("```스스로에게 질문할 수 없습니다.```"))
                         else:
                             self.setQuestionTarget(user.id, target.id) # 뱃지 변경
